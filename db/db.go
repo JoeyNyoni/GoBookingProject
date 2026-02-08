@@ -3,14 +3,15 @@ package db
 import (
 	"database/sql"
 
-	_ "github.com/mattn/go-sqlite3" // _ means we are importing for side-effects only
+	_ "modernc.org/sqlite" // means we are importing for side-effects only
 )
 
 var DB *sql.DB // capitalized variable is exported
 
 // InitDB initializes the database connection
 func InitDB() {
-	DB, err := sql.Open("sqlite3", "api.db")
+	var err error
+	DB, err = sql.Open("sqlite", "api.db")
 
 	if err != nil {
 		panic("Cannot connect to database: " + err.Error()) // panic is used when we cannot recover from an error
@@ -29,7 +30,7 @@ func createTables() {
 		name TEXT NOT NULL,
 		description TEXT NOT NULL,
 		location TEXT NOT NULL,
-		dateTime DATETIME NOT NULL,
+		date_time DATETIME NOT NULL,
 		user_id INTEGER
 	);`
 

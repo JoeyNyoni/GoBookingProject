@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"example.com/booking-project/db"
+)
 
 type Event struct {
-	ID          int       `json:"id"`
+	ID          int64     `json:"id"`
 	Name        string    `json:"name" binding:"required"`
 	Description string    `json:"description" binding:"required"`
 	Location    string    `json:"location" binding:"required"`
@@ -11,13 +15,57 @@ type Event struct {
 	UserId      int       `json:"user_id"`
 }
 
-var events []Event = []Event{}
+var events = []Event{}
 
-func (e Event) Save() {
-	// Logic to save the event to a database
-	events = append(events, e)
+func (e *Event) Save() error {
+	query := `
+	INSERT INTO events (name, description, location, date_time, user_id) 
+	VALUES (?, ?, ?, ?, ?)` // Use parameterized queries to prevent SQL injection
+
+	// PREPARE MEANS TO COMPILE THE QUERY AND CHECK FOR SYNTAX ERRORS
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	// execute means to run the query with the provided parameters
+	result, err := stmt.Exec(e.Name, e.Description, e.Location, e.DateTime, e.UserId)
+	if err != nil {
+		return err
+	}
+
+	id, err := result.LastInsertId() // Get the ID of the newly inserted event
+	if err != nil {
+		return err
+	}
+
+	e.ID = id
+	return err
 }
 
-func GetAllEvents() []Event {
-	return events
+func GetAllEvents() ([]Event, error) {
+	query := `SELECT * FROM events`
+
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Iterate through the rows and scan the data into Event structs
+	for rows.Next() {
+		var event Event
+		// Scan the row data into the event struct
+		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserId)
+		if err != nil {
+			return nil, err
+		}
+
+		events = append(events, event)
+	}
+
+	return events, nil
 }
