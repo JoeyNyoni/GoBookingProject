@@ -15,4 +15,5 @@ func RegisterRoutes(server *gin.Engine) {
 
 	// functions like signup are defined in routes/users.go
 	server.POST("/signup", signup)
+	server.POST("/login", login)
 }

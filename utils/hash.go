@@ -6,9 +6,11 @@ import (
 
 func HashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if err != nil {
-		return "", err
-	}
+	return string(hash), err
+}
 
-	return string(hash), nil
+// CheckPasswordHash compares a plaintext password with a hashed password and returns true if they match
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

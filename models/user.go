@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"example.com/booking-project/db"
 	"example.com/booking-project/utils"
 )
@@ -34,4 +36,24 @@ func (u User) Save() error {
 
 	u.ID = id
 	return err
+}
+
+func (u User) ValidatePassword(password string) error {
+	query := `SELECT email, password FROM users WHERE email = ?`
+	row := db.DB.QueryRow(query, u.Email)
+
+	var email string
+	var retrievedPassword string
+
+	err := row.Scan(&email, &retrievedPassword)
+	if err != nil {
+		return err
+	}
+
+	isPwdValid := utils.CheckPasswordHash(password, retrievedPassword)
+	if !isPwdValid {
+		return errors.New("Password is invalid")
+	}
+
+	return nil
 }
