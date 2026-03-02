@@ -12,7 +12,7 @@ type Event struct {
 	Description string    `json:"description" binding:"required"`
 	Location    string    `json:"location" binding:"required"`
 	DateTime    time.Time `json:"date_time" binding:"required"`
-	UserId      int       `json:"user_id"`
+	UserId      int64     `json:"user_id"`
 }
 
 var events = []Event{}
@@ -58,6 +58,7 @@ func GetAllEvents() ([]Event, error) {
 	// Iterate through the rows and scan the data into Event structs
 	for rows.Next() {
 		var event Event
+
 		// Scan the row data into the event struct
 		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserId)
 		if err != nil {
