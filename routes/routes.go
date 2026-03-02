@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"example.com/booking-project/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -9,9 +10,13 @@ func RegisterRoutes(server *gin.Engine) {
 	// functions like getEvents, getEventById, createEvent are defined in routes/events.go
 	server.GET("/events", getEvents)
 	server.GET("/events/:id", getEventById)
-	server.POST("/events", createEvent)
-	server.PUT("/events/:id", updateEvent)
-	server.DELETE("/events/:id", deleteEvent)
+
+	// setup a group of routes that require authentication
+	authenticated := server.Group("/")
+	authenticated.Use(middlewares.Authenticate)
+	authenticated.POST("/events", createEvent)
+	authenticated.PUT("/events/:id", updateEvent)
+	authenticated.DELETE("/events/:id", deleteEvent)
 
 	// functions like signup are defined in routes/users.go
 	server.POST("/signup", signup)

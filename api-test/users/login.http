@@ -1,5 +1,6 @@
 POST http://localhost:8080/login
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMkBleGFtcGxlLmNvLnphIiwiZXhwIjoxNzcyNDk2OTk1LCJ1c2VySWQiOjJ9.QVYHA4b6fffuuYFpNgfqnycgs0w2o5oDMs9dPABkSN0
 
 {
     "email": "testuser2@example.co.za",

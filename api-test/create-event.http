@@ -1,10 +1,10 @@
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUuY28uemEiLCJleHAiOjE3NzI0OTQxMjEsInVzZXJJZCI6MH0.DS21YD88nZOLi-YNGAAXRkeUDDa52cU5GxiuZyNLyvA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMkBleGFtcGxlLmNvLnphIiwiZXhwIjoxNzcyNDk1NzE0LCJ1c2VySWQiOjJ9.-lwJp9fubZmfgNkX1OhoC-wWQvbfwiUWhbvRS1gr8dE
 
 {
-  "name": "Test Event 2",
-  "description": "This is a test event.",
+  "name": "Test Event",
+  "description": "test event.",
   "location": "San Francisco, CA",
   "date_time": "2024-09-15T09:00:00Z"
 }

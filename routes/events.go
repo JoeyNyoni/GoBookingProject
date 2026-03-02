@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"example.com/booking-project/models"
-	"example.com/booking-project/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,25 +35,15 @@ func getEventById(context *gin.Context) {
 
 func createEvent(context *gin.Context) {
 	// authenticate the token before allowing the user to create an event
-	token := context.Request.Header.Get("Authorization")
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token is required"})
-		return
-	}
-
-	userId, err := utils.VerifyJWTToken(token)
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
-		return
-	}
-
 	var event models.Event
 
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse request body"})
 		return
 	}
+
+	userId := context.GetInt64("userId")
 
 	event.ID = 1
 	event.UserId = userId
